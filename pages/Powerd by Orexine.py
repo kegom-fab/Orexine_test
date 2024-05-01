@@ -1,6 +1,7 @@
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from PIL import Image
 
 st.set_page_config(
     page_title="Opportunity",
@@ -11,9 +12,8 @@ st.markdown(f'<h1 style="font-size:30px; text-align: center;text-decoration: und
 
 st.markdown(f'<h3 style="font-size:20px; text-align: center;">{"Welcome to our company!!!"}</h3>', unsafe_allow_html=True)
 
-logo_image_path = "orexine.jpg"  
-html_code = f'<img src="file:///{logo_image_path}" alt="Company Logo" width="400">'
-st.markdown(html_code, unsafe_allow_html=True)
+image = Image.open('orexine.jpg')
+st.image(image, width=150)
 
 text = """
     <div style="text-align: justify">
