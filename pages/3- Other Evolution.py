@@ -16,15 +16,15 @@ st.markdown(f'<h1 style="font-size:30px; text-align: center;text-decoration: und
 data['Time Granularity'] = data['Created Date'].dt.to_period('M').astype(str)
 
 # Créer une liste des granularités disponibles
-granularities = ['Par mois', 'Par trimestre', 'Par année']
+granularities = ['Per month', 'Per quarter', 'Per year']
 
 # Demander à l'utilisateur de choisir la granularité temporelle
-selected_granularity = st.selectbox('Choisissez la granularité temporelle :', granularities)
+selected_granularity = st.selectbox('Choose the temporal granularity :', granularities)
 
 # Regrouper les données en fonction de la granularité sélectionnée par l'utilisateur
-if selected_granularity == 'Par trimestre':
+if selected_granularity == 'Per quarter':
     data['Time Granularity'] = data['Created Date'].dt.to_period('Q').astype(str)
-elif selected_granularity == 'Par année':
+elif selected_granularity == 'Per year':
     data['Time Granularity'] = data['Created Date'].dt.to_period('Y').astype(str)
 
 # Compter le nombre unique de projets et de clients pour chaque période de temps
@@ -36,25 +36,25 @@ fig = go.Figure()
 
 # Ajouter la courbe pour le nombre de projets
 fig.add_trace(go.Scatter(x=projects_count['Time Granularity'], y=projects_count['Opportunity Name'],
-                         mode='lines+markers', name='Nombre de projets', line=dict(color='blue')))
+                         mode='lines+markers', name='Number of projects', line=dict(color='blue')))
 
 # Ajouter la courbe pour le nombre de clients
 fig.add_trace(go.Scatter(x=clients_count['Time Granularity'], y=clients_count['Account Name'],
-                         mode='lines+markers', name='Nombre de clients', line=dict(color='red')))
+                         mode='lines+markers', name='Number of clients', line=dict(color='red')))
 
 # Mettre à jour les étiquettes de l'axe des x en fonction de la granularité
-if selected_granularity == 'Par mois':
-    fig.update_xaxes(title_text='Mois')
-elif selected_granularity == 'Par trimestre':
-    fig.update_xaxes(title_text='Trimestre')
-elif selected_granularity == 'Par année':
-    fig.update_xaxes(title_text='Année')
+if selected_granularity == 'Per month':
+    fig.update_xaxes(title_text='Month')
+elif selected_granularity == 'Per quarter':
+    fig.update_xaxes(title_text='Quarter')
+elif selected_granularity == 'Per year':
+    fig.update_xaxes(title_text='Year')
 
 # Mettre à jour les étiquettes de l'axe des y
-fig.update_yaxes(title_text='Nombre')
+fig.update_yaxes(title_text='Number')
 
 # Mettre à jour le titre du graphique
-fig.update_layout(title='Évolution du nombre de projets et de clients')
+fig.update_layout(title='Evolution of the number of projects and clients')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
