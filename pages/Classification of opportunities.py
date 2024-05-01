@@ -18,35 +18,35 @@ data_sorted = data.sort_values(by='Total Revenue')
 data['Quarter'] = data['Created Date'].dt.to_period('Q').astype(str)
 
 # Demander à l'utilisateur le nombre de projets à afficher
-chosen_option = st.number_input("Nombre de projets les plus rentables à afficher par trimestre: ", min_value=1, value=5)
+chosen_option = st.number_input("Number of most profitable projects to display per quarter: ", min_value=1, value=5)
 # Trouver les projets les plus rentables pour chaque trimestre
 top_profitable_per_quarter = data.groupby('Quarter').apply(lambda x: x.nlargest(chosen_option, 'Total Revenue')).reset_index(drop=True)
 # Créer un graphique à barres
 fig = px.bar(top_profitable_per_quarter, x='Quarter', y='Total Revenue', color='Opportunity Name', 
-             title=f'{chosen_option} projets les plus rentables pour chaque trimestre', 
-             labels={'Quarter': 'Trimestre', 'Total Revenue': 'Revenu total', 'Opportunity Name': 'Nom du projet'})
+             title=f'{chosen_option} most profitable projects for each quarter', 
+             labels={'Quarter': 'Quarter', 'Total Revenue': 'Total revenu', 'Opportunity Name': 'Name of project'})
 
 # Afficher le graphique
 st.plotly_chart(fig)
-st.markdown(f'<h2 style="font-size:30px; text-align: center;text-decoration: underline">{"Une vue globale sur lensemble des années"}</h2>', unsafe_allow_html=True)
+st.markdown(f'<h2 style="font-size:30px; text-align: center;text-decoration: underline">{"A global view over all the years"}</h2>', unsafe_allow_html=True)
 # Sélectionner les projets les plus ou moins rentables selon le choix de l'utilisateur
-option = st.selectbox("Choisissez de voir les projets les :", ['Plus rentables', 'Moins rentables'])
-if option == 'Plus rentables':
+option = st.selectbox("Choose to see the projects :", ['Most profitables', 'Least profitables'])
+if option == 'Most profitables':
     top_projects = data_sorted.tail(10)
-    title = 'Les 10 projets les plus rentables'
+    title = 'The 10 most profitable projects'
 else:
     top_projects = data_sorted.head(10)
-    title = 'Les 10 projets les moins rentables (si rien ne saffiche ca veut dire que les revenus sont à 0)'
+    title = 'The 10 least profitable projects (if nothing is displayed it means that the income is 0)'
 # Vérifier si tous les revenus sont à 0
 if top_projects['Total Revenue'].sum() == 0:
-    st.write("Aucune donnée à afficher car les revenus sont nuls, egale à 0.")
+    st.write("No data to display because the revenues are zero, equal to 0.")
 else:
     # Créer un graphique en camembert
     fig = px.pie(top_projects, values='Total Revenue', names='Opportunity Name', title=title)
 
     # Afficher le graphique
     st.plotly_chart(fig)
-if option == 'Plus rentables':
+if option == 'Most profitables':
     st.write("Top 10 of more profitable :")
     st.write(data_sorted.tail(10)[['Opportunity Name', 'Account Name','Created Date','Stage','1st Year Revenue (Merged)','Revenue Weightage (next year)', 'Total Revenue']].reset_index(drop=True))
 elif option == 'Moins rentables':
@@ -57,13 +57,13 @@ elif option == 'Moins rentables':
 # Compter le nombre de projets par trimestre
 projects_per_quarter = data.groupby('Quarter').size().reset_index(name='Number of Projects')
 # Créer un graphe avec Plotly Express
-fig = px.line(projects_per_quarter, x='Quarter', y='Number of Projects', title='Nombre de projets par trimestre')
+fig = px.line(projects_per_quarter, x='Quarter', y='Number of Projects', title='Number of projects per quarter')
 # Afficher le graphe
 st.plotly_chart(fig)
 
 # Afficher la liste des projets pour le trimestre sélectionné
-selected_quarter = st.selectbox("Sélectionner un trimestre", projects_per_quarter['Quarter'].unique())
+selected_quarter = st.selectbox("Select a quarter", projects_per_quarter['Quarter'].unique())
 projects_in_selected_quarter = data[data['Quarter'] == selected_quarter]
-st.write("Liste des projets pour le trimestre sélectionné :")
+st.write("List of projects for the selected quarter:")
 st.write(projects_in_selected_quarter[['Opportunity Name', 'Account Name', 'Created Date', 'Stage']])
 st.markdown(f'<h1 style="color: blue; font-size:18px; text-align: center">{"Powerd by Orexine"}</h1>', unsafe_allow_html=True)
