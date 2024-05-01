@@ -31,7 +31,7 @@ merged_data = pd.merge(merged_data, projects_by_client, on='Account Name')
 merged_data_sorted = merged_data.sort_values(by='Total Revenue', ascending=False)
 
 # Widget de sélection du nombre de clients
-selected_clients = st.slider('Sélectionnez le nombre de clients à afficher', min_value=1, max_value=min(20, merged_data_sorted.shape[0]), value=5)
+selected_clients = st.slider('Select the number of customers to display', min_value=1, max_value=min(20, merged_data_sorted.shape[0]), value=5)
 
 # Sélectionner les premiers clients en fonction du nombre choisi
 top_clients_filtered = merged_data_sorted.head(selected_clients)
@@ -41,17 +41,17 @@ fig = px.bar(top_clients_filtered, x='Account Name', y='Total Revenue', hover_da
              color='Number of Projects', color_continuous_scale='viridis', labels={'Account Name': 'Client', 'Total Revenue': 'Revenus'})
 
 # Mettre à jour le titre du graphique
-fig.update_layout(title=f'Top {selected_clients} des clients avec les plus hauts revenus, leurs derniers projets et le nombre de projets')
+fig.update_layout(title=f'Top {selected_clients} clients with the highest revenue, their latest projects and number of projects')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
 
 # Ajouter une colonne pour l'unité de temps choisie par l'utilisateur (mois, trimestre ou année)
-unit_of_time = st.selectbox("Sélectionnez l'unité de temps", ["Mois", "Trimestre", "Année"])
+unit_of_time = st.selectbox("Select time unit", ["Month", "Quarter", "Year"])
 
-if unit_of_time == "Mois":
+if unit_of_time == "Month":
     data['Time Unit'] = data['Created Date'].dt.to_period('M').astype(str)
-elif unit_of_time == "Trimestre":
+elif unit_of_time == "Quarter":
     data['Time Unit'] = data['Created Date'].dt.to_period('Q').astype(str)
 else:
     data['Time Unit'] = data['Created Date'].dt.to_period('Y').astype(str)
@@ -61,8 +61,8 @@ clients_by_time_unit = data.groupby('Time Unit')['Account Name'].nunique().reset
 
 # Tracer le graphique
 fig = px.bar(clients_by_time_unit, x='Time Unit', y='Account Name', 
-             labels={'Time Unit': f'{unit_of_time}', 'Account Name': 'Nombre de Clients'},
-             title=f'Nombre de Clients par {unit_of_time}')
+             labels={'Time Unit': f'{unit_of_time}', 'Account Name': 'Number of Clients'},
+             title=f'Number of Clients per {unit_of_time}')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
