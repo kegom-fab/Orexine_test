@@ -19,30 +19,30 @@ data['Total Revenue'] = data['1st Year Revenue (Merged)'] + data['Revenue Weight
 data['Time Granularity'] = data['Created Date'].dt.to_period('M').astype(str)
 
 # Créer une liste des granularités disponibles
-granularities = ['Par mois', 'Par trimestre', 'Par année']
+granularities = ['Per month', 'Per quarter', 'Per year']
 
 # Demander à l'utilisateur de choisir la granularité temporelle
-selected_granularity = st.selectbox('Choisissez la granularité temporelle :', granularities)
+selected_granularity = st.selectbox('Choose the temporal granularity :', granularities)
 
 # Regrouper les données en fonction de la granularité sélectionnée par l'utilisateur
-if selected_granularity == 'Par trimestre':
+if selected_granularity == 'Per quarter':
     data['Time Granularity'] = data['Created Date'].dt.to_period('Q').astype(str)
-elif selected_granularity == 'Par année':
+elif selected_granularity == 'Per year':
     data['Time Granularity'] = data['Created Date'].dt.to_period('Y').astype(str)
 
 # Regrouper les données par granularité temporelle et calculer le total des revenus
 revenue_by_time = data.groupby('Time Granularity')['Total Revenue'].sum().reset_index()
 
 # Créer le graphique avec Plotly Express
-fig = px.line(revenue_by_time, x='Time Granularity', y='Total Revenue', title='Évolution du total des revenus')
+fig = px.line(revenue_by_time, x='Time Granularity', y='Total Revenue', title='Evolution of total revenue')
 
 # Mettre à jour les étiquettes de l'axe des x en fonction de la granularité
-if selected_granularity == 'Par mois':
-    fig.update_xaxes(title_text='Mois')
-elif selected_granularity == 'Par trimestre':
-    fig.update_xaxes(title_text='Trimestre')
-elif selected_granularity == 'Par année':
-    fig.update_xaxes(title_text='Année')
+if selected_granularity == 'Per month':
+    fig.update_xaxes(title_text='Month')
+elif selected_granularity == 'Per quarter':
+    fig.update_xaxes(title_text='Quarter')
+elif selected_granularity == 'Per year':
+    fig.update_xaxes(title_text='Year')
 
 # Afficher le graphique dans Streamlit
 st.plotly_chart(fig)
