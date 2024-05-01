@@ -10,8 +10,11 @@ st.set_page_config(
 st.markdown(f'<h1 style="font-size:30px; text-align: center;text-decoration: underline">{"Orexine"}</h1>', unsafe_allow_html=True)
 
 st.markdown(f'<h3 style="font-size:20px; text-align: center;">{"Welcome to our company!!!"}</h3>', unsafe_allow_html=True)
-logo_image = "orexine.jpg"
-st.image(logo_image, use_column_width=True)
+
+logo_image_path = "orexine.jpg"  
+html_code = f'<img src="file:///{logo_image_path}" alt="Company Logo" width="400">'
+st.markdown(html_code, unsafe_allow_html=True)
+
 text = """
     <div style="text-align: justify">
     We are a dynamic company specializing in software development, data analysis, digital transformation, IT consulting, and business analysis. 
